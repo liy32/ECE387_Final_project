@@ -1,0 +1,71 @@
+//Pulse sensor part
+int gps=8;
+int buzzerpin=10;
+  
+ void setup(){
+  pinMode(blinkPin,OUTPUT);         
+  pinMode(fadePin,OUTPUT);          
+  pinMode(gps,OUTPUT);
+  pinMode(buzzerpin,OUTPUT);
+  Serial.begin(115200);             }
+  
+ void loop(){
+          if(BPM<60){  
+        digitalWrite(gps,HIGH);  
+        NewTone(buzzerpin,200);
+        }
+        else if(BPM>120){
+        digitalWrite(gps,HIGH);
+        NewTone(buzzerpin,200);
+        }
+        else{
+        digitalWrite(gps,LOW);
+        noNewTone(buzzerpin);
+        }
+        }
+        
+
+//GPS module part
+
+int gpspin=8;
+int gpsstate=0;
+
+void setup(){
+  Serial.print("Testing TinyGPS library v. "); Serial.println(TinyGPS::library_version());
+  Serial.println();
+  Serial.print("Sizeof(gpsobject) = "); Serial.println(sizeof(TinyGPS));
+  Serial.println();
+  pinMode(gpspin,INPUT);
+}
+  void gpsdump(TinyGPS &gps)
+{
+  long lat, lon;
+  float flat, flon;
+  unsigned long age, date, time, chars;
+  int year;
+  byte month, day, hour, minute, second, hundredths;
+  unsigned short sentences, failed;
+
+if(gpsstate==HIGH){
+  Serial.println("Emergency Situation!");
+  gps.get_position(&lat, &lon, &age);
+  Serial.print("Lat/Long(10^-5 deg): "); Serial.print(lat); Serial.print(", "); Serial.print(lon); 
+  Serial.print(" Fix age: "); 
+
+
+  gps.f_get_position(&flat, &flon, &age);
+  Serial.print("Lat/Long(float): "); printFloat(flat, 5); Serial.print(", "); printFloat(flon, 5);
+
+  gps.get_datetime(&date, &time, &age);
+  
+  gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, &hundredths, &age);
+
+
+  gps.stats(&chars, &sentences, &failed);
+}
+else{
+  }
+}
+
+  
+  
